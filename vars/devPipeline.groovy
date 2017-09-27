@@ -12,8 +12,8 @@ def call(String namespace, String project){
         steps {
           echo 'Building application'
           script {
-            //def utils = new Utils()
-            //utils.hello 'Codependent'
+            def utils = new Utils()
+            utils.hello 'Codependent'
           }
           sh '''
              echo "PATH = ${PATH}"
