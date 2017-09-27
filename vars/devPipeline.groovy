@@ -1,4 +1,4 @@
-import com.codependent.jenkins.pipelines.Utils
+import com.codependent.jenkins.pipelines.openshift.Utils
 
 def call(String namespace, String project){
   def processedMavenGoals = mavenGoals.join ' '
