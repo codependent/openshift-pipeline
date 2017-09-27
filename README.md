@@ -1,2 +1,2 @@
-# openshift-pipeline
-Jenkins Openshift Pipeline
+# jenkins-pipeline-shared-library-example
+Jenkins shared library example
