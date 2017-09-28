@@ -27,11 +27,11 @@ def call(String area, String project){
       stage ('Acp Stage') {
         steps {
           echo 'Building & Deploying Docker Image'
-          openshiftBuild(namespace: area+'acp', bldCfg: project, showBuildLogs: 'true')
+          openshiftBuild(namespace: area+'-acp', bldCfg: project, showBuildLogs: 'true')
           echo 'Verifying deployment'
-          openshiftVerifyDeployment(namespace: area+'acp', depCfg: project)
+          openshiftVerifyDeployment(namespace: area+'-acp', depCfg: project)
           echo 'Tagging immage'
-          openshiftTag(srcStream: area+'acp', srcTag: 'latest', destStream: area+'acp', destTag: pom.version)
+          openshiftTag(srcStream: area+'-acp', srcTag: 'latest', destStream: area+'-acp', destTag: pom.version)
         }
       }
     }
