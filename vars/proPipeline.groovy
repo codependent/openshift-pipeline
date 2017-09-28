@@ -2,7 +2,7 @@ import com.codependent.jenkins.pipelines.openshift.Utils
 
 def call(String area, String project){  
   def pom
-  dev utils = new Utils()
+  def utils = new Utils()
 
   pipeline {
     agent any
