@@ -1,6 +1,8 @@
 import com.codependent.jenkins.pipelines.openshift.Utils
 
-def call(String namespace, String project){
+def call(String area, String project){
+  def pom = readMavenPom file: 'pom.xml'
+  
   pipeline {
     agent any
     tools { 
@@ -22,12 +24,14 @@ def call(String namespace, String project){
           sh "mvn clean install -U -Dmaven.test.failure.ignore=true"
         }
       }
-      stage ('Dev Stage') {
+      stage ('Acp Stage') {
         steps {
           echo 'Building & Deploying Docker Image'
-          openshiftBuild(namespace: namespace, bldCfg: project, showBuildLogs: 'true')
+          openshiftBuild(namespace: area+'acp', bldCfg: project, showBuildLogs: 'true')
           echo 'Verifying deployment'
-          openshiftVerifyDeployment(namespace: namespace, depCfg: project)
+          openshiftVerifyDeployment(namespace: area+'acp', depCfg: project)
+          echo 'Tagging immage'
+          openshiftTag(srcStream: area+'acp', srcTag: 'latest', destStream: area+'acp', destTag: pom.version)
         }
       }
     }
