@@ -26,10 +26,6 @@ def call(String area, String project){
       }
       stage ('Acp Stage') {
         steps {
-          script{
-            echo 'weeee'
-            promoteAndVerify project, pom.version, 'promote-uat', area+'-acp', area+'-uat'
-          }
           echo 'Building & Deploying Docker Image'
           openshiftBuild(namespace: area+'-acp', bldCfg: project, showBuildLogs: 'true')
           echo 'Verifying deployment'
