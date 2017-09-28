@@ -38,6 +38,8 @@ def call(String area, String project){
         steps {
           echo 'Promoting Image from Acp'
           openshiftTag(srcStream: project, srcTag: pom.version, destStream: project, destTag: 'promote-uat', namespace: area+'-acp')
+          echo 'Verifying deployment'
+          openshiftVerifyDeployment(namespace: area+'-uat', depCfg: project)
         }
       }
     }
