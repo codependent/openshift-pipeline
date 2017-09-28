@@ -14,8 +14,6 @@ def call(String area, String project){
           echo 'Building application'
           script {
             pom = readMavenPom file: 'pom.xml'
-            def utils = new Utils()
-            utils.hello 'Codependent'
           }
           sh '''
              echo "PATH = ${PATH}"
@@ -26,20 +24,20 @@ def call(String area, String project){
       }
       stage ('Acp Stage') {
         steps {
+          echo 'weeee'
+          promoteAndVerify project, pom.version, 'promote-uat', area+'-acp', area+'-uat'
+          echo 'weeee'
           echo 'Building & Deploying Docker Image'
           openshiftBuild(namespace: area+'-acp', bldCfg: project, showBuildLogs: 'true')
           echo 'Verifying deployment'
           openshiftVerifyDeployment(namespace: area+'-acp', depCfg: project)
           echo 'Tagging immage'
-          openshiftTag(srcStream: project, srcTag: 'latest', destStream: project, destTag: pom.version, namespace: area+'-acp')
+          openshiftTag(namespace: area+'-acp', srcStream: project, srcTag: 'latest', destStream: project, destTag: pom.version)
         }
       }
       stage ('Uat Stage') {
         steps {
-          echo 'Promoting Image from Acp'
-          openshiftTag(srcStream: project, srcTag: pom.version, destStream: project, destTag: 'promote-uat', namespace: area+'-acp')
-          echo 'Verifying deployment'
-          openshiftVerifyDeployment(namespace: area+'-uat', depCfg: project)
+          promoteAndVerify project, pom.version, 'promote-uat', area+'-acp', area+'-uat'
         }
       }
       stage ('Pro Stage') {
@@ -49,10 +47,7 @@ def call(String area, String project){
               input message: 'Are you sure you want to deploy to Production?'
             }
           }
-          echo 'Promoting Image from Acp'
-          openshiftTag(srcStream: project, srcTag: pom.version, destStream: project, destTag: 'promote-pro', namespace: area+'-acp')
-          echo 'Verifying deployment'
-          openshiftVerifyDeployment(namespace: area+'-pro', depCfg: project)
+          promoteAndVerify project, pom.version, 'promote-pro', area+'-acp', area+'-pro'
         }
       }
     }
