@@ -1,18 +1,19 @@
 import com.codependent.jenkins.pipelines.openshift.Utils
 
 def call(String area, String project){  
+  def pom
   pipeline {
     agent any
     tools { 
       maven 'M3' 
       jdk 'JDK8' 
     }
-    def pom = readMavenPom file: 'pom.xml'
     stages {
       stage ('Commit Stage') {
         steps {
           echo 'Building application'
           script {
+            pom = readMavenPom file: 'pom.xml'
             def utils = new Utils()
             utils.hello 'Codependent'
           }
