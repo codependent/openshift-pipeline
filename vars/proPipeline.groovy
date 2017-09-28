@@ -1,14 +1,13 @@
 import com.codependent.jenkins.pipelines.openshift.Utils
 
-def call(String area, String project){
-  def pom = readMavenPom file: 'pom.xml'
-  
+def call(String area, String project){  
   pipeline {
     agent any
     tools { 
       maven 'M3' 
       jdk 'JDK8' 
     }
+    def pom = readMavenPom file: 'pom.xml'
     stages {
       stage ('Commit Stage') {
         steps {
