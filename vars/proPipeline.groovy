@@ -27,7 +27,7 @@ def call(String area, String project){
       stage ('Acp Stage') {
         steps {
           echo 'Building & Deploying Docker Image'
-          openshiftBuild(namespace: area+'-acp', bldCfg: project, showBuildLogs: 'true', env: ["ARTIFACT_VERSION=$pom.version"])
+          openshiftBuild(namespace: area+'-acp', bldCfg: project, showBuildLogs: 'true', env: [['ARTIFACT_VERSION' : pom.version]])
           echo 'Verifying deployment'
           openshiftVerifyDeployment(namespace: area+'-acp', depCfg: project)
           echo 'Tagging immage'
