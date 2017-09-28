@@ -1,7 +1,9 @@
-import static com.codependent.jenkins.pipelines.openshift.Utils
+import com.codependent.jenkins.pipelines.openshift.Utils
 
 def call(String area, String project){  
   def pom
+  dev utils = new Utils()
+
   pipeline {
     agent any
     tools { 
@@ -26,7 +28,6 @@ def call(String area, String project){
         steps {
           echo 'weeee'
           promoteAndVerify project, pom.version, 'promote-uat', area+'-acp', area+'-uat'
-          echo 'weeee'
           echo 'Building & Deploying Docker Image'
           openshiftBuild(namespace: area+'-acp', bldCfg: project, showBuildLogs: 'true')
           echo 'Verifying deployment'
@@ -37,7 +38,7 @@ def call(String area, String project){
       }
       stage ('Uat Stage') {
         steps {
-          promoteAndVerify project, pom.version, 'promote-uat', area+'-acp', area+'-uat'
+          utils.promoteAndVerify project, pom.version, 'promote-uat', area+'-acp', area+'-uat'
         }
       }
       stage ('Pro Stage') {
@@ -47,7 +48,7 @@ def call(String area, String project){
               input message: 'Are you sure you want to deploy to Production?'
             }
           }
-          promoteAndVerify project, pom.version, 'promote-pro', area+'-acp', area+'-pro'
+          utils.promoteAndVerify project, pom.version, 'promote-pro', area+'-acp', area+'-pro'
         }
       }
     }
