@@ -16,6 +16,7 @@ def call(String area, String project){
           echo 'Building application'
           script {
             pom = readMavenPom file: 'pom.xml'
+            utils.promoteAndVerify project, pom.version, 'promote-uat', area+'-acp', area+'-uat'
           }
           sh '''
              echo "PATH = ${PATH}"
