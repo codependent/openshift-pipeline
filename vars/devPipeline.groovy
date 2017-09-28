@@ -24,7 +24,7 @@ def call(String namespace, String project){
       stage ('Dev Stage') {
         steps {
           echo 'Building & Deploying Docker Image'
-          openshiftBuild(namespace: namespace, bldCfg: project, showBuildLogs: 'true', env: ['ARTIFACT_VERSION' : pom.version] )
+          openshiftBuild(namespace: namespace, bldCfg: project, showBuildLogs: 'true', env: [ [ name: 'ARTIFACT_VERSION' , value: pom.version] ])
           echo 'Verifying deployment'
           openshiftVerifyDeployment(namespace: namespace, depCfg: project)
         }
