@@ -42,6 +42,14 @@ def call(String area, String project){
           openshiftVerifyDeployment(namespace: area+'-uat', depCfg: project)
         }
       }
+      stage ('Pro Stage') {
+        steps {
+          echo 'Promoting Image from Acp'
+          openshiftTag(srcStream: project, srcTag: pom.version, destStream: project, destTag: 'promote-pro', namespace: area+'-acp')
+          echo 'Verifying deployment'
+          openshiftVerifyDeployment(namespace: area+'-pro', depCfg: project)
+        }
+      }
     }
   }
 }
