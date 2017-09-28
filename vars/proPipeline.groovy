@@ -31,7 +31,7 @@ def call(String area, String project){
           echo 'Verifying deployment'
           openshiftVerifyDeployment(namespace: area+'-acp', depCfg: project)
           echo 'Tagging immage'
-          openshiftTag(srcStream: area+'-acp/'+project, srcTag: 'latest', destStream: area+'-acp/'+project), destTag: pom.version)
+          openshiftTag(srcStream: area+'-acp/'+project, srcTag: 'latest', destStream: area+'-acp/'+project, destTag: pom.version)
         }
       }
       stage ('Uat Stage') {
