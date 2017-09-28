@@ -44,6 +44,11 @@ def call(String area, String project){
       }
       stage ('Pro Stage') {
         steps {
+          script{
+            timeout(time:1, unit:'DAYS') {
+              input message: 'Are you sure you want to deploy to Production?'
+            }
+          }
           echo 'Promoting Image from Acp'
           openshiftTag(srcStream: project, srcTag: pom.version, destStream: project, destTag: 'promote-pro', namespace: area+'-acp')
           echo 'Verifying deployment'
