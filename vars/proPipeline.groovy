@@ -26,8 +26,10 @@ def call(String area, String project){
       }
       stage ('Acp Stage') {
         steps {
-          echo 'weeee'
-          promoteAndVerify project, pom.version, 'promote-uat', area+'-acp', area+'-uat'
+          script{
+            echo 'weeee'
+            promoteAndVerify project, pom.version, 'promote-uat', area+'-acp', area+'-uat'
+          }
           echo 'Building & Deploying Docker Image'
           openshiftBuild(namespace: area+'-acp', bldCfg: project, showBuildLogs: 'true')
           echo 'Verifying deployment'
@@ -38,7 +40,9 @@ def call(String area, String project){
       }
       stage ('Uat Stage') {
         steps {
-          utils.promoteAndVerify project, pom.version, 'promote-uat', area+'-acp', area+'-uat'
+          script{
+            utils.promoteAndVerify project, pom.version, 'promote-uat', area+'-acp', area+'-uat'
+          } 
         }
       }
       stage ('Pro Stage') {
@@ -47,8 +51,8 @@ def call(String area, String project){
             timeout(time:1, unit:'DAYS') {
               input message: 'Are you sure you want to deploy to Production?'
             }
+            utils.promoteAndVerify project, pom.version, 'promote-pro', area+'-acp', area+'-pro'
           }
-          utils.promoteAndVerify project, pom.version, 'promote-pro', area+'-acp', area+'-pro'
         }
       }
     }
