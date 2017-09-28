@@ -31,13 +31,13 @@ def call(String area, String project){
           echo 'Verifying deployment'
           openshiftVerifyDeployment(namespace: area+'-acp', depCfg: project)
           echo 'Tagging immage'
-          openshiftTag(srcStream: area+'-acp/'+project, srcTag: 'latest', destStream: area+'-acp/'+project, destTag: pom.version)
+          openshiftTag(srcStream: project, srcTag: 'latest', destStream: project, destTag: pom.version, namespace: area+'-acp')
         }
       }
       stage ('Uat Stage') {
         steps {
           echo 'Promoting Image from Acp'
-          openshiftTag(srcStream: area+'-acp/'+project, srcTag: pom.version, destStream: area+'-acp/'+project, destTag: 'promote-uat')
+          openshiftTag(srcStream: project, srcTag: pom.version, destStream: project, destTag: 'promote-uat', namespace: area+'-acp')
         }
       }
     }
