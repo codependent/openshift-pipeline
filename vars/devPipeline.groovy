@@ -1,5 +1,3 @@
-import com.codependent.jenkins.pipelines.openshift.Utils
-
 def call(String namespace, String project){
   pipeline {
     agent any
@@ -11,10 +9,6 @@ def call(String namespace, String project){
       stage ('Commit Stage') {
         steps {
           echo 'Building application'
-          script {
-            def utils = new Utils()
-            utils.hello 'Codependent'
-          }
           sh '''
              echo "PATH = ${PATH}"
              echo "M2_HOME = ${M2_HOME}"
