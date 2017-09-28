@@ -1,4 +1,6 @@
 def call(String namespace, String project){
+  def pom
+
   pipeline {
     agent any
     tools { 
@@ -9,6 +11,9 @@ def call(String namespace, String project){
       stage ('Commit Stage') {
         steps {
           echo 'Building application'
+          script {
+            pom = readMavenPom file: 'pom.xml'
+          }
           sh '''
              echo "PATH = ${PATH}"
              echo "M2_HOME = ${M2_HOME}"
@@ -19,7 +24,7 @@ def call(String namespace, String project){
       stage ('Dev Stage') {
         steps {
           echo 'Building & Deploying Docker Image'
-          openshiftBuild(namespace: namespace, bldCfg: project, showBuildLogs: 'true')
+          openshiftBuild(namespace: namespace, bldCfg: project, showBuildLogs: 'true', env: ["ARTIFACT_VERSION=$pom.version"])
           echo 'Verifying deployment'
           openshiftVerifyDeployment(namespace: namespace, depCfg: project)
         }
