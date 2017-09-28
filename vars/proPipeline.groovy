@@ -21,7 +21,7 @@ def call(String area, String project){
              echo "PATH = ${PATH}"
              echo "M2_HOME = ${M2_HOME}"
              ''' 
-          sh "mvn clean install -U -Dmaven.test.failure.ignore=true"
+          sh "mvn clean install"
         }
       }
       stage ('Acp Stage') {
