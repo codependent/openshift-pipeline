@@ -1,4 +1,4 @@
-def call(String namespace, String project){
+def call(String area, String project){
   def pom
 
   pipeline {
@@ -24,9 +24,9 @@ def call(String namespace, String project){
       stage ('Dev Stage') {
         steps {
           echo 'Building & Deploying Docker Image'
-          openshiftBuild(namespace: namespace, bldCfg: project, showBuildLogs: 'true', env: [ [ name: 'ARTIFACT_VERSION' , value: pom.version] ])
+          openshiftBuild(namespace: area+'-dev', bldCfg: project, showBuildLogs: 'true', env: [ [ name: 'ARTIFACT_VERSION' , value: pom.version] ])
           echo 'Verifying deployment'
-          openshiftVerifyDeployment(namespace: namespace, depCfg: project)
+          openshiftVerifyDeployment(namespace: area+'-dev', depCfg: project)
         }
       }
     }
